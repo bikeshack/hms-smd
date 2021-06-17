@@ -213,7 +213,7 @@ usb[0-9]+"
                                     required: False
                                   InterfaceEnabled:
                                     type: bool
-                                    required: True
+                                    required: False
                                   MACAddress:
                                     type: str
                                     required: True
@@ -275,6 +275,9 @@ ManagementEthernet"
                                   "@odata.id":
                                     type: str
                                     required: True
+                                  InterfaceEnabled:
+                                    type: bool
+                                    required: False
                                   Description:
                                     type: str
                                     required: False
