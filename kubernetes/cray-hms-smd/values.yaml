@@ -132,6 +132,11 @@ cray-service:
         optional: true
   sqlCluster:
     enabled: true
+    tls:
+      enabled: true
+    backup:
+      enabled: true
+      schedule: "10 0 * * *" # Once per day at 12:10AM
     users:
       hmsdsuser: []
     databases:
