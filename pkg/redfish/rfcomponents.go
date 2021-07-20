@@ -1222,7 +1222,10 @@ func (s *EpSystem) discoverRemotePhase1() {
 		}
 
 		// Discover HPE devices to find GPUs
-		if strings.ToLower(s.SystemRF.Manufacturer) == "hpe" && nodeChassis.ChassisRF.OEM.Hpe.Links.Devices.Oid != "" {
+		if strings.ToLower(s.SystemRF.Manufacturer) == "hpe" &&
+			nodeChassis.ChassisRF.OEM != nil &&
+			nodeChassis.ChassisRF.OEM.Hpe != nil &&
+			nodeChassis.ChassisRF.OEM.Hpe.Links.Devices.Oid != "" {
 			path = nodeChassis.ChassisRF.OEM.Hpe.Links.Devices.Oid
 			url = s.epRF.FQDN + path
 			devicesJSON, err := s.epRF.GETRelative(path)
