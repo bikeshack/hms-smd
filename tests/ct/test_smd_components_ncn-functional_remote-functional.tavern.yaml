@@ -123,6 +123,8 @@ stages:
                           - "Halt"
                           - "On"
                           - "Off"
+                          # needed for ncn-m001 when it is not part of the management network CASMHMS-4862
+                          - "Populated"
                       Flag:
                         type: str
                         required: True
@@ -371,7 +373,9 @@ stages:
   # 14. GET /Components?type=Node API response code
   - name: Ensure that we can conduct a query on the Component collection by looking for Compute nodes
     request:
-      url: "{base_url}/smd/hsm/v1/State/Components?type=Node"
+      # also query with role=Compute since not all of the same node data is expected
+      # in HSM for the master management PIT node ncn-m001 CASMHMS-4862
+      url: "{base_url}/smd/hsm/v1/State/Components?type=Node&role=Compute"
       method: GET
       headers:
         Authorization: "Bearer {access_token}"
@@ -562,7 +566,9 @@ stages:
   # 22. GET /Components?type=Node API response body
   - name: Conduct a query using the type parameter to look for hardware of the Node type
     request:
-      url: "{base_url}/smd/hsm/v1/State/Components?type=Node"
+      # also query with role=Compute since not all of the same node data is expected
+      # in HSM for the master management PIT node ncn-m001 CASMHMS-4862
+      url: "{base_url}/smd/hsm/v1/State/Components?type=Node&role=Compute"
       method: GET
       headers:
         Authorization: "Bearer {access_token}"
@@ -640,9 +646,11 @@ stages:
 
   # 23. GET /Components?type=Node&Flag={flag} API response code
   # 24. GET /Components?type=Node&Flag={flag} API response body
-  - name: Conduct a query using the type & flag parameters to look for hardware of the Node type with a certain Flag
+  - name: Conduct a query using the type and flag parameters to look for hardware of the Node type with a certain Flag
     request:
-      url: "{base_url}/smd/hsm/v1/State/Components?type=Node&Flag={Flag}"
+      # also query with role=Compute since not all of the same node data is expected
+      # in HSM for the master management PIT node ncn-m001 CASMHMS-4862
+      url: "{base_url}/smd/hsm/v1/State/Components?type=Node&role=Compute&Flag={Flag}"
       method: GET
       headers:
         Authorization: "Bearer {access_token}"
@@ -722,9 +730,11 @@ stages:
 
   # 25. GET /Components?type=Node&Arch=X86 API response code
   # 26. GET /Components?type=Node&Arch=X86 API response body
-  - name: Conduct a query using the type & flag parameters to look for hardware of the X86 Arch type
+  - name: Conduct a query using the type and flag parameters to look for hardware of the X86 Arch type
     request:
-      url: "{base_url}/smd/hsm/v1/State/Components?type=Node&Arch=X86"
+      # also query with role=Compute since not all of the same node data is expected
+      # in HSM for the master management PIT node ncn-m001 CASMHMS-4862
+      url: "{base_url}/smd/hsm/v1/State/Components?type=Node&role=Compute&Arch=X86"
       method: GET
       headers:
         Authorization: "Bearer {access_token}"
@@ -804,7 +814,7 @@ stages:
 
   # 27. GET /Components?type=Node&nid={nid} API response code
   # 28. GET /Components?type=Node&nid={nid} API response body
-  - name: Conduct a query using the type & nid query parameters
+  - name: Conduct a query using the type and nid query parameters
     request:
       url: "{base_url}/smd/hsm/v1/State/Components?type=Node&nid={NID}"
       method: GET
