@@ -25,8 +25,8 @@ package sharedtest
 import (
 	"encoding/json"
 
-	rf "stash.us.cray.com/HMS/hms-smd/pkg/redfish"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	rf "github.com/Cray-HPE/hms-smd/pkg/redfish"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 )
 
 //////////////////////////////////////////////////////////////////////////////

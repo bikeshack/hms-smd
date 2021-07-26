@@ -24,6 +24,6 @@ FROM cray/smd-base
 
 # Run test coverage...
 RUN set -ex && \
-    go test -cover -v stash.us.cray.com/HMS/hms-smd/cmd/smd && \
-    go test -cover -v stash.us.cray.com/HMS/hms-smd/internal/./... && \
-    go test -cover -v stash.us.cray.com/HMS/hms-smd/pkg/./...
+    go test -cover -v github.com/Cray-HPE/hms-smd/cmd/smd && \
+    go test -cover -v github.com/Cray-HPE/hms-smd/internal/./... && \
+    go test -cover -v github.com/Cray-HPE/hms-smd/pkg/./...

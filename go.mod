@@ -1,8 +1,14 @@
-module stash.us.cray.com/HMS/hms-smd
+module github.com/Cray-HPE/hms-smd
 
 go 1.16
 
 require (
+	github.com/Cray-HPE/hms-base v1.15.0
+	github.com/Cray-HPE/hms-certs v1.3.2
+	github.com/Cray-HPE/hms-compcredentials v1.11.2
+	github.com/Cray-HPE/hms-go-http-lib v1.5.3
+	github.com/Cray-HPE/hms-msgbus v1.10.2
+	github.com/Cray-HPE/hms-securestorage v1.12.2
 	github.com/DATA-DOG/go-sqlmock v1.3.3
 	github.com/Masterminds/squirrel v1.4.0
 	github.com/frankban/quicktest v1.7.3 // indirect
@@ -12,12 +18,12 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.4
 	github.com/hashicorp/go-hclog v0.14.1 // indirect
-	github.com/hashicorp/go-retryablehttp v0.6.7
+	github.com/hashicorp/go-retryablehttp v0.7.0
 	github.com/lib/pq v1.3.0
 	github.com/onsi/ginkgo v1.12.0 // indirect
 	github.com/onsi/gomega v1.9.0 // indirect
 	github.com/pierrec/lz4 v2.4.1+incompatible // indirect
-	github.com/sirupsen/logrus v1.6.0
+	github.com/sirupsen/logrus v1.8.1
 	github.com/stretchr/testify v1.5.1 // indirect
 	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899 // indirect
 	golang.org/x/net v0.0.0-20200813134508-3edf25e44fcc // indirect
@@ -28,10 +34,4 @@ require (
 	google.golang.org/genproto v0.0.0-20200815001618-f69a88009b70 // indirect
 	google.golang.org/grpc v1.29.1 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
-	stash.us.cray.com/HMS/hms-base v1.13.0
-	stash.us.cray.com/HMS/hms-certs v1.3.0
-	stash.us.cray.com/HMS/hms-compcredentials v1.11.0
-	stash.us.cray.com/HMS/hms-go-http-lib v1.5.0
-	stash.us.cray.com/HMS/hms-msgbus v1.10.0
-	stash.us.cray.com/HMS/hms-securestorage v1.12.0
 )

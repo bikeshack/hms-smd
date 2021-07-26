@@ -23,8 +23,8 @@
 package main
 
 import (
-	base "stash.us.cray.com/HMS/hms-base"
-	msgbus "stash.us.cray.com/HMS/hms-msgbus"
+	base "github.com/Cray-HPE/hms-base"
+	msgbus "github.com/Cray-HPE/hms-msgbus"
 	"strconv"
 	"strings"
 )

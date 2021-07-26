@@ -29,8 +29,8 @@ import (
 	"strconv"
 	"strings"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	base "github.com/Cray-HPE/hms-base"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 
 	"github.com/lib/pq"
 )

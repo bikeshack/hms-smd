@@ -1,3 +1,21 @@
+# github.com/Cray-HPE/hms-base v1.15.0
+## explicit
+github.com/Cray-HPE/hms-base
+# github.com/Cray-HPE/hms-certs v1.3.2
+## explicit
+github.com/Cray-HPE/hms-certs/pkg/hms_certs
+# github.com/Cray-HPE/hms-compcredentials v1.11.2
+## explicit
+github.com/Cray-HPE/hms-compcredentials
+# github.com/Cray-HPE/hms-go-http-lib v1.5.3
+## explicit
+github.com/Cray-HPE/hms-go-http-lib
+# github.com/Cray-HPE/hms-msgbus v1.10.2
+## explicit
+github.com/Cray-HPE/hms-msgbus
+# github.com/Cray-HPE/hms-securestorage v1.12.2
+## explicit
+github.com/Cray-HPE/hms-securestorage
 # github.com/DATA-DOG/go-sqlmock v1.3.3
 ## explicit
 github.com/DATA-DOG/go-sqlmock
@@ -51,7 +69,7 @@ github.com/hashicorp/go-cleanhttp
 ## explicit
 # github.com/hashicorp/go-multierror v1.1.0
 github.com/hashicorp/go-multierror
-# github.com/hashicorp/go-retryablehttp v0.6.7
+# github.com/hashicorp/go-retryablehttp v0.7.0
 ## explicit
 github.com/hashicorp/go-retryablehttp
 # github.com/hashicorp/go-rootcerts v1.0.1
@@ -78,7 +96,7 @@ github.com/hashicorp/vault/sdk/helper/jsonutil
 github.com/hashicorp/vault/sdk/helper/parseutil
 github.com/hashicorp/vault/sdk/helper/strutil
 # github.com/konsorten/go-windows-terminal-sequences v1.0.3
-github.com/konsorten/go-windows-terminal-sequences
+## explicit
 # github.com/lann/builder v0.0.0-20180802200727-47ae307949d0
 github.com/lann/builder
 # github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0
@@ -104,7 +122,7 @@ github.com/pierrec/lz4/internal/xxh32
 github.com/rcrowley/go-metrics
 # github.com/ryanuber/go-glob v1.0.0
 github.com/ryanuber/go-glob
-# github.com/sirupsen/logrus v1.6.0
+# github.com/sirupsen/logrus v1.8.1
 ## explicit
 github.com/sirupsen/logrus
 # github.com/stretchr/testify v1.5.1
@@ -126,6 +144,7 @@ golang.org/x/net/proxy
 ## explicit
 golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
+golang.org/x/sys/windows
 # golang.org/x/text v0.3.3
 ## explicit
 golang.org/x/text/secure/bidirule
@@ -148,21 +167,3 @@ gopkg.in/square/go-jose.v2
 gopkg.in/square/go-jose.v2/cipher
 gopkg.in/square/go-jose.v2/json
 gopkg.in/square/go-jose.v2/jwt
-# stash.us.cray.com/HMS/hms-base v1.13.0
-## explicit
-stash.us.cray.com/HMS/hms-base
-# stash.us.cray.com/HMS/hms-certs v1.3.0
-## explicit
-stash.us.cray.com/HMS/hms-certs/pkg/hms_certs
-# stash.us.cray.com/HMS/hms-compcredentials v1.11.0
-## explicit
-stash.us.cray.com/HMS/hms-compcredentials
-# stash.us.cray.com/HMS/hms-go-http-lib v1.5.0
-## explicit
-stash.us.cray.com/HMS/hms-go-http-lib
-# stash.us.cray.com/HMS/hms-msgbus v1.10.0
-## explicit
-stash.us.cray.com/HMS/hms-msgbus
-# stash.us.cray.com/HMS/hms-securestorage v1.12.0
-## explicit
-stash.us.cray.com/HMS/hms-securestorage

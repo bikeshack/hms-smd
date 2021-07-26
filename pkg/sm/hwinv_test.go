@@ -23,8 +23,8 @@
 package sm_test
 
 import (
-	stest "stash.us.cray.com/HMS/hms-smd/pkg/sharedtest"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	stest "github.com/Cray-HPE/hms-smd/pkg/sharedtest"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 	"testing"
 )
 

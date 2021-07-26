@@ -30,7 +30,7 @@ import (
 	"database/sql"
 	"strings"
 
-	base "stash.us.cray.com/HMS/hms-base"
+	base "github.com/Cray-HPE/hms-base"
 
 	sq "github.com/Masterminds/squirrel"
 )
