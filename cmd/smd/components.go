@@ -27,9 +27,9 @@ import (
 	"fmt"
 	"strconv"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	"stash.us.cray.com/HMS/hms-smd/internal/hmsds"
-	rf "stash.us.cray.com/HMS/hms-smd/pkg/redfish"
+	base "github.com/Cray-HPE/hms-base"
+	"github.com/Cray-HPE/hms-smd/internal/hmsds"
+	rf "github.com/Cray-HPE/hms-smd/pkg/redfish"
 )
 
 ////////////////////////////////////////////////////////////////////////////

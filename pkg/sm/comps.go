@@ -24,7 +24,7 @@ package sm
 
 import (
 	"fmt"
-	base "stash.us.cray.com/HMS/hms-base"
+	base "github.com/Cray-HPE/hms-base"
 )
 
 // The payload for a Components POST

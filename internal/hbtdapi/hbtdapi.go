@@ -33,7 +33,7 @@ import (
 	"net/http"
 	"net/url"
 	"time"
-	"stash.us.cray.com/HMS/hms-base"
+	"github.com/Cray-HPE/hms-base"
 )
 
 const DefaultHbtdUrl string = "http://cray-hbtd/hmi/v1"

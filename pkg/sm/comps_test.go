@@ -25,7 +25,7 @@ package sm
 import (
 	"fmt"
 	"reflect"
-	base "stash.us.cray.com/HMS/hms-base"
+	base "github.com/Cray-HPE/hms-base"
 	"testing"
 )
 

@@ -27,12 +27,12 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	compcreds "stash.us.cray.com/HMS/hms-compcredentials"
-	sstorage "stash.us.cray.com/HMS/hms-securestorage"
-	"stash.us.cray.com/HMS/hms-smd/internal/hmsds"
-	rf "stash.us.cray.com/HMS/hms-smd/pkg/redfish"
-	st "stash.us.cray.com/HMS/hms-smd/pkg/sharedtest"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	compcreds "github.com/Cray-HPE/hms-compcredentials"
+	sstorage "github.com/Cray-HPE/hms-securestorage"
+	"github.com/Cray-HPE/hms-smd/internal/hmsds"
+	rf "github.com/Cray-HPE/hms-smd/pkg/redfish"
+	st "github.com/Cray-HPE/hms-smd/pkg/sharedtest"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 	"testing"
 )
 

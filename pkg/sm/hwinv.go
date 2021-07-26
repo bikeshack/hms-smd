@@ -27,8 +27,8 @@ import (
 	"regexp"
 	"strconv"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	rf "stash.us.cray.com/HMS/hms-smd/pkg/redfish"
+	base "github.com/Cray-HPE/hms-base"
+	rf "github.com/Cray-HPE/hms-smd/pkg/redfish"
 )
 
 var ErrHWLocInvalid = base.NewHMSError("sm", "ID is empty or not a valid xname")
