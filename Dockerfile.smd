@@ -40,14 +40,6 @@ COPY internal $GOPATH/src/github.com/Cray-HPE/hms-smd/internal
 COPY pkg $GOPATH/src/github.com/Cray-HPE/hms-smd/pkg
 COPY vendor $GOPATH/src/github.com/Cray-HPE/hms-smd/vendor
 
-FROM base
-
-# Run unit tests...
-RUN set -ex && \
-    go test -v github.com/Cray-HPE/hms-smd/cmd/smd && \
-    go test -v github.com/Cray-HPE/hms-smd/internal/./... && \
-    go test -v github.com/Cray-HPE/hms-smd/pkg/./...
-
 ### Build Stage ###
 FROM base AS builder
 
