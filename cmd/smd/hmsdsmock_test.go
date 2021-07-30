@@ -25,9 +25,9 @@ package main
 import (
 	"log"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	"stash.us.cray.com/HMS/hms-smd/internal/hmsds"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	base "github.com/Cray-HPE/hms-base"
+	"github.com/Cray-HPE/hms-smd/internal/hmsds"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 )
 
 type TestResults struct {

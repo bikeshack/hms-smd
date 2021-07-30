@@ -35,12 +35,12 @@ import (
 	"strings"
 	"testing"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	compcreds "stash.us.cray.com/HMS/hms-compcredentials"
-	sstorage "stash.us.cray.com/HMS/hms-securestorage"
-	"stash.us.cray.com/HMS/hms-smd/internal/hmsds"
-	stest "stash.us.cray.com/HMS/hms-smd/pkg/sharedtest"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	base "github.com/Cray-HPE/hms-base"
+	compcreds "github.com/Cray-HPE/hms-compcredentials"
+	sstorage "github.com/Cray-HPE/hms-securestorage"
+	"github.com/Cray-HPE/hms-smd/internal/hmsds"
+	stest "github.com/Cray-HPE/hms-smd/pkg/sharedtest"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 
 	"github.com/gorilla/mux"
 )

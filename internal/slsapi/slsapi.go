@@ -31,7 +31,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	base "stash.us.cray.com/HMS/hms-base"
+	base "github.com/Cray-HPE/hms-base"
 	"time"
 )
 

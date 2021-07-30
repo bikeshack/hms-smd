@@ -34,7 +34,7 @@ import (
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/lib/pq"
-	"stash.us.cray.com/HMS/hms-smd/internal/hmsds"
+	"github.com/Cray-HPE/hms-smd/internal/hmsds"
 )
 
 const APP_VERSION = "1"

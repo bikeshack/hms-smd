@@ -27,7 +27,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	base "stash.us.cray.com/HMS/hms-base"
+	base "github.com/Cray-HPE/hms-base"
 )
 
 ////////////////////////////////////////////////////////////////////////////

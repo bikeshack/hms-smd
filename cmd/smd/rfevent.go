@@ -28,10 +28,10 @@ import (
 	"strings"
 	"sync"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	"stash.us.cray.com/HMS/hms-smd/internal/hmsds"
-	rf "stash.us.cray.com/HMS/hms-smd/pkg/redfish"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	base "github.com/Cray-HPE/hms-base"
+	"github.com/Cray-HPE/hms-smd/internal/hmsds"
+	rf "github.com/Cray-HPE/hms-smd/pkg/redfish"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 )
 
 var em = base.NewHMSError("sm.msgbus", "internal error")

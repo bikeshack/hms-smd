@@ -32,8 +32,8 @@ import (
 	"strings"
 	"time"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	base "github.com/Cray-HPE/hms-base"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/google/uuid"

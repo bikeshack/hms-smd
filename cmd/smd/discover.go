@@ -28,11 +28,11 @@ import (
 	"strings"
 	"sync"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	compcreds "stash.us.cray.com/HMS/hms-compcredentials"
-	"stash.us.cray.com/HMS/hms-smd/internal/hmsds"
-	rf "stash.us.cray.com/HMS/hms-smd/pkg/redfish"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	base "github.com/Cray-HPE/hms-base"
+	compcreds "github.com/Cray-HPE/hms-compcredentials"
+	"github.com/Cray-HPE/hms-smd/internal/hmsds"
+	rf "github.com/Cray-HPE/hms-smd/pkg/redfish"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 )
 
 // When we discover a Redfish Endpoint, the data retrieved is processed

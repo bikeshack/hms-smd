@@ -36,7 +36,7 @@ import (
 
 	"github.com/hashicorp/go-retryablehttp"
 	"github.com/sirupsen/logrus"
-	"stash.us.cray.com/HMS/hms-base"
+	"github.com/Cray-HPE/hms-base"
 )
 
 const HSM_DEFAULT_RESERVATION_PATH = "/hsm/v2/locks/service/reservations"
