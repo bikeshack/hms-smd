@@ -18,6 +18,7 @@ pipeline {
         DOCKER_ARGS = getDockerBuildArgs(name: "hms-smd", description: env.DESCRIPTION, version: env.VERSION)
         CHART_NAME = "cray-hms-smd"
         CHART_VERSION = getChartVersion(version: env.VERSION)
+		DOCKERFILE = "Dockerfile.smd"
     }
 
     stages {
