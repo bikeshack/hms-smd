@@ -1822,7 +1822,7 @@ func IsManufacturer(mfrCheckStr, mfr string) int {
 		for _, s := range split {
 			switch mfr {
 			case CrayMfr:
-				if s == "cray" || s == "crayinc" || s == "crayincorporated" {
+				if s == "cray" || s == "crayinc" || s == "crayincorporated" || s == "hpe" {
 					return 1
 				}
 			case IntelMfr:
