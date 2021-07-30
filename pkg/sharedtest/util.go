@@ -23,7 +23,7 @@
 package sharedtest
 
 import (
-	base "stash.us.cray.com/HMS/hms-base"
+	base "github.com/Cray-HPE/hms-base"
 )
 
 func CompareComp(comp1 *base.Component, comp2 *base.Component) bool {

@@ -23,7 +23,7 @@
 package main
 
 import (
-	msgbus "stash.us.cray.com/HMS/hms-msgbus"
+	msgbus "github.com/Cray-HPE/hms-msgbus"
 	"testing"
 )
 

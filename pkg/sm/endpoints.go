@@ -24,8 +24,8 @@ package sm
 
 import (
 	"encoding/json"
-	base "stash.us.cray.com/HMS/hms-base"
-	rf "stash.us.cray.com/HMS/hms-smd/pkg/redfish"
+	base "github.com/Cray-HPE/hms-base"
+	rf "github.com/Cray-HPE/hms-smd/pkg/redfish"
 )
 
 // This is a generic link to a resource owned by state manager, i.e. a

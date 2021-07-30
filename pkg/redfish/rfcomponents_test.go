@@ -32,8 +32,8 @@ import (
 	"net/http"
 	"testing"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	"stash.us.cray.com/HMS/hms-certs/pkg/hms_certs"
+	base "github.com/Cray-HPE/hms-base"
+	"github.com/Cray-HPE/hms-certs/pkg/hms_certs"
 )
 
 // RoundTrip method override

@@ -30,8 +30,8 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"stash.us.cray.com/HMS/hms-base"
-	hmshttp "stash.us.cray.com/HMS/hms-go-http-lib"
+	"github.com/Cray-HPE/hms-base"
+	hmshttp "github.com/Cray-HPE/hms-go-http-lib"
 	"syscall"
 	"time"
 )

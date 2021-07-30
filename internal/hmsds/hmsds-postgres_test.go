@@ -33,10 +33,10 @@ import (
 	"testing"
 	"time"
 
-	base "stash.us.cray.com/HMS/hms-base"
-	rf "stash.us.cray.com/HMS/hms-smd/pkg/redfish"
-	stest "stash.us.cray.com/HMS/hms-smd/pkg/sharedtest"
-	"stash.us.cray.com/HMS/hms-smd/pkg/sm"
+	base "github.com/Cray-HPE/hms-base"
+	rf "github.com/Cray-HPE/hms-smd/pkg/redfish"
+	stest "github.com/Cray-HPE/hms-smd/pkg/sharedtest"
+	"github.com/Cray-HPE/hms-smd/pkg/sm"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	sq "github.com/Masterminds/squirrel"

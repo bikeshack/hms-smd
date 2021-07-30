@@ -18,6 +18,7 @@ pipeline {
         DOCKER_ARGS = getDockerBuildArgs(name: "hms-smd", description: env.DESCRIPTION, version: env.VERSION)
         CHART_NAME = "cray-hms-smd"
         CHART_VERSION = getChartVersion(version: env.VERSION)
+		DOCKERFILE = "Dockerfile.smd"
     }
 
     stages {
@@ -48,7 +49,7 @@ pipeline {
         stage("Publish") {
             steps {
                 script {
-                    publishCsmDockerImage(image: env.NAME, tag: env.VERSION, isStable: env.IS_STABLE)
+                    publishCsmDockerImage(image: env.NAME, tag: env.VERSION, isStable: env.IS_STABLE, snykTargetFile: env.DOCKERFILE, snykSeverity: 'high')
                     publishCsmHelmCharts(component: env.CHART_NAME, chartsPath: "${WORKSPACE}/kubernetes/.packaged", isStable: env.IS_STABLE)
                 }
             }

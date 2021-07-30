@@ -26,7 +26,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	reservation "stash.us.cray.com/HMS/hms-smd/pkg/service-reservations"
+	reservation "github.com/Cray-HPE/hms-smd/pkg/service-reservations"
 )
 
 func main() {

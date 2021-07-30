@@ -25,7 +25,7 @@ package sm
 import (
 	"encoding/json"
 	"fmt"
-	base "stash.us.cray.com/HMS/hms-base"
+	base "github.com/Cray-HPE/hms-base"
 )
 
 // An entry mapping a node xname to a NID
