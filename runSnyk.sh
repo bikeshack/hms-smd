@@ -34,7 +34,7 @@ DOCKER_CHECK=
 if [ -f Dockerfile ]; then
     DOCKER_IMAGE=${PWD/*\//}:$(cat .version)
     docker build --tag $DOCKER_IMAGE .
-    OUT=$(set -x; snyk test --docker $DOCKER_IMAGE --file=${PWD}/Dockerfile $SNYK_OPTS)
+    OUT=$(set -x; snyk test --docker $DOCKER_IMAGE --file=${PWD}/Dockerfile.smd $SNYK_OPTS)
     DOCKER_CHECK=OK
     jq .ok <<<"$OUT" | grep -q false && DOCKER_CHECK=FAIL
 fi
