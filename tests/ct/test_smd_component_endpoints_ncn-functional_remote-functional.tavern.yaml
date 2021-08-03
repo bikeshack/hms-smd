@@ -310,7 +310,8 @@ Not Available"
                                     type: str
                                     required: True
                                     pattern: "[0-9]+|\
-Node"
+Node|\
+Accelerator[0-9]+"
                                   "@odata.id":
                                     type: str
                                     required: True
