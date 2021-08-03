@@ -12,9 +12,9 @@ info:
     communicating with components via Redfish.
     It also allows administrators to create partitions and groups for other uses.
 
-    ## Deprecation Notice: V1 of the HMS service has been deprecated as of CSM version 1.4. 
-    The V1 HSM API’s will be removed in the CSM version 1.6 release. 
-    All consumers of the V1 HSM API interface will need to move to the V2 interface prior to the CSM 1.6 release.
+    ## Deprecation Notice: V1 of the HMS service has been deprecated as of CSM version 0.9.3. 
+    The V1 HSM API’s will be removed in the CSM version 1.3 release. 
+    All consumers of the V1 HSM API interface will need to move to the V2 interface prior to the CSM 1.3 release.
 
     ## Resources
 
