@@ -21,7 +21,7 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-SNYK_OPTS="--dev --show-vulnerable-paths=all --fail-on=all --severity-threshold=${SEVERITY:-high} --skip-unresolved=true --org=hpe-cray-playground --json"
+SNYK_OPTS="--dev --show-vulnerable-paths=all --fail-on=all --severity-threshold=${SEVERITY:-high} --skip-unresolved=true --json"
 
 OUT=$(set -x; snyk test --all-projects --detection-depth=999 $SNYK_OPTS)
 
@@ -34,7 +34,7 @@ DOCKER_CHECK=
 if [ -f Dockerfile ]; then
     DOCKER_IMAGE=${PWD/*\//}:$(cat .version)
     docker build --tag $DOCKER_IMAGE .
-    OUT=$(set -x; snyk test --docker $DOCKER_IMAGE --file=${PWD}/Dockerfile $SNYK_OPTS)
+    OUT=$(set -x; snyk test --docker $DOCKER_IMAGE --file=${PWD}/Dockerfile.smd $SNYK_OPTS)
     DOCKER_CHECK=OK
     jq .ok <<<"$OUT" | grep -q false && DOCKER_CHECK=FAIL
 fi
