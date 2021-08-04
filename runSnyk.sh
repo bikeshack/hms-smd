@@ -31,9 +31,9 @@ jq .[].ok <<<"$OUT" | grep -q false && PROJ_CHECK=FAIL
 echo Snyk project check: $PROJ_CHECK
 
 DOCKER_CHECK=
-if [ -f Dockerfile ]; then
+if [ -f Dockerfile.smd ]; then
     DOCKER_IMAGE=${PWD/*\//}:$(cat .version)
-    docker build --tag $DOCKER_IMAGE .
+    docker build --tag $DOCKER_IMAGE -f Dockerfile.smd .
     OUT=$(set -x; snyk test --docker $DOCKER_IMAGE --file=${PWD}/Dockerfile.smd $SNYK_OPTS)
     DOCKER_CHECK=OK
     jq .ok <<<"$OUT" | grep -q false && DOCKER_CHECK=FAIL
