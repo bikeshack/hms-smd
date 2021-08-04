@@ -26,7 +26,7 @@
 FROM arti.dev.cray.com/baseos-docker-master-local/golang:1.14-alpine3.12 AS build-base
 
 RUN set -ex \
-    && apk update \
+    && apk -U upgrade \
     && apk add build-base
 
 # Base copies in the files we need to test/build.
@@ -37,14 +37,6 @@ COPY cmd $GOPATH/src/github.com/Cray-HPE/hms-smd/cmd
 COPY internal $GOPATH/src/github.com/Cray-HPE/hms-smd/internal
 COPY pkg $GOPATH/src/github.com/Cray-HPE/hms-smd/pkg
 COPY vendor $GOPATH/src/github.com/Cray-HPE/hms-smd/vendor
-
-FROM base
-
-# Run unit tests...
-RUN set -ex && \
-    go test -v github.com/Cray-HPE/hms-smd/cmd/smd && \
-    go test -v github.com/Cray-HPE/hms-smd/internal/./... && \
-    go test -v github.com/Cray-HPE/hms-smd/pkg/./...
 
 ### Build Stage ###
 FROM base AS builder
@@ -107,7 +99,7 @@ COPY configs /configs
 
 # Cannot live without these packages installed.
 RUN set -ex \
-    && apk update \
+    && apk -U upgrade \
     && apk add --no-cache \
         postgresql-client
 
