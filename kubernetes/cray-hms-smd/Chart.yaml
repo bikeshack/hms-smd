@@ -2,4 +2,4 @@ apiVersion: v1
 description: "Kubernetes resources for cray-hms-smd"
 name: "cray-hms-smd"
 home: "HMS/hms-smd"
-version: 1.29.12
+version: 1.29.13
