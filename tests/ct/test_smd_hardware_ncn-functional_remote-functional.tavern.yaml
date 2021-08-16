@@ -81,7 +81,9 @@ test_name: Query the Hardware collection for Node information
 stages:
   - name: Retrieve a node xname from the Components collection to use in the next stage
     request:
-      url: "{base_url}/smd/hsm/v1/State/Components?type=Node"
+      # also query with role=Compute since not all of the same node data is expected
+      # in HSM for the master management PIT node ncn-m001 CASMHMS-4862
+      url: "{base_url}/smd/hsm/v1/State/Components?type=Node&role=Compute"
       method: GET
       headers:
         Authorization: "Bearer {access_token}"
