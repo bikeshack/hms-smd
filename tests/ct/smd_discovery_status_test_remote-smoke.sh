@@ -1,19 +1,19 @@
 #!/bin/bash -l
 
 # MIT License
-
+#
 # (C) Copyright [2021] Hewlett Packard Enterprise Development LP
-
+#
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
 # to deal in the Software without restriction, including without limitation
 # the rights to use, copy, modify, merge, publish, distribute, sublicense,
 # and/or sell copies of the Software, and to permit persons to whom the
 # Software is furnished to do so, subject to the following conditions:
-
+#
 # The above copyright notice and this permission notice shall be included
 # in all copies or substantial portions of the Software.
-
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -122,9 +122,37 @@ fi
 timestamp_print "Verifying endpoint discovery statuses..."
 PARSED_FAILED=$(echo "${PARSED_OUT}" | grep -v "DiscoverOK")
 NUM_FAILS=$(echo "${PARSED_FAILED}" | grep -E "ID.*LastDiscoveryStatus" | wc -l)
+# check which failed discovery statuses are present in order to print troubleshooting steps
+FURTHER_PARSED_FAILED=$(echo "${PARSED_FAILED}" | grep -E "ID.*LastDiscoveryStatus")
+HTTPS_GET_FAILED_CHECK_NUM=$(echo "${FURTHER_PARSED_FAILED}" | grep -E "\"HTTPsGetFailed\"" | wc -l)
+CHILD_VERIFICATION_FAILED_CHECK_NUM=$(echo "${FURTHER_PARSED_FAILED}" | grep -E "\"ChildVerificationFailed\"" | wc -l)
+DISCOVERY_STARTED_CHECK_NUM=$(echo "${FURTHER_PARSED_FAILED}" | grep -E "\"DiscoveryStarted\"" | wc -l)
 # one endpoint on the site network is expected to be unreachable and fail discovery with a status of 'HTTPSGetFailed'
 if [[ ${NUM_FAILS} -gt 1 ]] ; then
     echo "${PARSED_FAILED}"
+    echo
+    echo "Note: 'HTTPsGetFailed' is the expected discovery status for ncn-m001 which is not normally connected to the site network."
+    echo
+    # print troubleshooting steps
+    if [[ ${HTTPS_GET_FAILED_CHECK_NUM} -gt 1 ]] ; then
+        echo "To troubleshoot the 'HTTPsGetFailed' endpoints:"
+        echo "1. Run 'nslookup <xname>'. If this fails, it may indicate a DNS issue."
+        echo "2. Run 'ping -c 1 <xname>'. If this fails, it may indicate a network or hardware issue."
+        echo "3. Run 'curl -s -k -u root:<password> https://<xname>/redfish/v1/Managers'. If this fails, it may indicate a credentials issue."
+        echo
+    fi
+    if [[ ${CHILD_VERIFICATION_FAILED_CHECK_NUM} -gt 0 ]] ; then
+        echo "To troubleshoot the 'ChildVerificationFailed' endpoints:"
+        echo "1. Run 'kubectl -n services get pods -l app.kubernetes.io/name=cray-smd' to get the names of the SMD pods."
+        echo "2. Run 'kubectl -n services logs <cray-smd-pod> cray-smd' and check the SMD logs for the cause of the bad Redfish path."
+        echo
+    fi
+    if [[ ${DISCOVERY_STARTED_CHECK_NUM} -gt 0 ]] ; then
+        echo "To troubleshoot the 'DiscoveryStarted' endpoints:"
+        echo "1. Poll the LastDiscoveryStatus of the endpoint with 'cray hsm inventory redfishEndpoints describe <xname>' until the current"
+        echo "discovery operation ends and results in a new state being set."
+        echo
+    fi
     echo "FAIL: smd_discovery_status_test found ${NUM_FAILS} endpoints that failed discovery, maximum allowable is 1"
     exit 1
 else
