@@ -1759,7 +1759,7 @@ func (ep *RedfishEP) getManagerHMSType(m *EpManager) string {
 		return ep.Type
 	}
 	// See if manager provides an entry point to the root service
-	if m.ManagerRF.ServiceEntryPointUUID == ep.UUID {
+	if ep.UUID != "" && m.ManagerRF.ServiceEntryPointUUID == ep.UUID {
 		return ep.Type
 	}
 	if len(m.ManagedSystems) > 0 {
@@ -1767,6 +1767,12 @@ func (ep *RedfishEP) getManagerHMSType(m *EpManager) string {
 		return base.NodeBMC.String()
 	}
 	if m.ManagerRF.ManagerType == RFSubtypeEnclosureManager {
+		// Cassini NodeBMCs look like ChassisBMCs because they're missing the
+		// Links.ManagerForServers field. If the managerType is "EnclosureManager",
+		// check to see if there are any Systems at all.
+		if ep.NumSystems > 0 {
+			return base.NodeBMC.String()
+		}
 		return base.ChassisBMC.String()
 	}
 	// TODO: Multiple managers.  We don't roll up managers
