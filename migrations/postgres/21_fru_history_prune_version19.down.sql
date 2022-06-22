@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * (C) Copyright [2021-2022] Hewlett Packard Enterprise Development LP
+ * (C) Copyright [2022] Hewlett Packard Enterprise Development LP
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -21,14 +21,16 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
--- Removes pruning function
+-- Removes the hardware history event indexes
 
 BEGIN;
 
-DROP FUNCTION hwinv_hist_prune();
+DROP INDEX hwinvhist_id_fruid_idx;
+
+DROP INDEX hwinvhist_id_fruid_ts_idx;
 
 -- Decrease the schema version
-INSERT INTO system VALUES(0, 17, '{}'::JSON)
-    ON CONFLICT(id) DO UPDATE SET schema_version=17;
+INSERT INTO system VALUES(0, 18, '{}'::JSON)
+    ON CONFLICT(id) DO UPDATE SET schema_version=18;
 
 COMMIT;

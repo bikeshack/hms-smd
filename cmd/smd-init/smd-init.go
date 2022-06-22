@@ -1,6 +1,6 @@
 // MIT License
 //
-// (C) Copyright [2019-2021] Hewlett Packard Enterprise Development LP
+// (C) Copyright [2019-2022] Hewlett Packard Enterprise Development LP
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
@@ -38,8 +38,8 @@ import (
 )
 
 const APP_VERSION = "1"
-const SCHEMA_VERSION = 18
-const SCHEMA_STEPS = 20
+const SCHEMA_VERSION = 19
+const SCHEMA_STEPS = 21
 
 var dbName string
 var dbUser string

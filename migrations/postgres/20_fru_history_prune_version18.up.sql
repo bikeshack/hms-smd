@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * (C) Copyright [2021] Hewlett Packard Enterprise Development LP
+ * (C) Copyright [2021-2022] Hewlett Packard Enterprise Development LP
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -21,7 +21,7 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
--- No schema changes. Prunes existing hardware history tables of redundant events.
+-- Adds pruning function for existing hardware history tables of redundant events.
 
 BEGIN;
 
@@ -49,8 +49,6 @@ BEGIN
     END LOOP;
 END;
 $$ LANGUAGE plpgsql;
-
-SELECT hwinv_hist_prune();
 
 -- Bump the schema version
 insert into system values(0, 18, '{}'::JSON)
