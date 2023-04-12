@@ -9,10 +9,4 @@ jobs:
     with:
       image-name: cray-smd
       enable-pr-comment: true
-    secrets:
-      artifactory-username: ${{ secrets.ARTIFACTORY_ALGOL60_USERNAME }}
-      artifactory-token: ${{ secrets.ARTIFACTORY_ALGOL60_TOKEN }}
-      snyk-token: ${{ secrets.SNYK_TOKEN }}
-      cosign-gcp-project-id: ${{ secrets.COSIGN_GCP_PROJECT_ID }}
-      cosign-gcp-sa-key:  ${{ secrets.COSIGN_GCP_SA_KEY }}
-      cosign-key: ${{ secrets.COSIGN_KEY }}
+    secrets: inherit
