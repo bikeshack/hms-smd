@@ -1,6 +1,6 @@
 // MIT License
 //
-// (C) Copyright [2019-2022] Hewlett Packard Enterprise Development LP
+// (C) Copyright [2019-2023] Hewlett Packard Enterprise Development LP
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
@@ -2326,6 +2326,13 @@ func (m *EpMemory) discoverLocalPhase2() {
 
 	m.Ordinal = m.epRF.getMemoryOrdinal(m)
 	m.ID = m.sysRF.ID + "d" + strconv.Itoa(m.Ordinal)
+
+	// Workaround for DIMMs that don't report the Status struct.
+	// They have a serial number of "NO DIMM" when empty.
+	if m.MemoryRF.Status.State == "" && m.MemoryRF.SerialNumber == "NO DIMM" {
+		m.MemoryRF.Status.State = "Absent"
+	}
+
 	if m.MemoryRF.Status.State != "Absent" {
 		m.Status = "Populated"
 		m.State = base.StatePopulated.String()
