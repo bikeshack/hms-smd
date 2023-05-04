@@ -107,13 +107,16 @@ type hmsTypeArrays struct {
 	NodeNICs            *[]*HWInvByLoc `json:"NodeNICs,omitempty"`
 	RouterBMCNics       *[]*HWInvByLoc `json:"RouterBMCNics,omitempty"`
 
+	MgmtSwitches    *[]*HWInvByLoc `json:"MgmtSwitches,omitempty"`
+	MgmtHLSwitches  *[]*HWInvByLoc `json:"MgmtHLSwitches,omitempty"`
+	CDUMgmtSwitches *[]*HWInvByLoc `json:"CDUMgmtSwitches,omitempty"`
+
 	// Also not implemented yet.  Not clear if these will have any interesting
 	// info, so they may never be,
 	SMSBoxes             *[]*HWInvByLoc `json:"SMSBoxes,omitempty"`
 	HSNLinks             *[]*HWInvByLoc `json:"HSNLinks,omitempty"`
 	HSNConnectors        *[]*HWInvByLoc `json:"HSNConnectors,omitempty"`
 	HSNConnectorPorts    *[]*HWInvByLoc `json:"HSNConnectorPorts,omitempty"`
-	MgmtSwitches         *[]*HWInvByLoc `json:"MgmtSwitches,omitempty"`
 	MgmtSwitchConnectors *[]*HWInvByLoc `json:"MgmtSwitchConnectors,omitempty"`
 }
 
@@ -200,6 +203,18 @@ func NewSystemHWInventory(hwlocs []*HWInvByLoc, xName, format string) (*SystemHW
 				hwinv.MgmtSwitches = &arr
 			}
 			*hwinv.MgmtSwitches = append(*hwinv.MgmtSwitches, hwloc)
+		case base.MgmtHLSwitch:
+			if hwinv.MgmtHLSwitches == nil {
+				arr := make([]*HWInvByLoc, 0, 1)
+				hwinv.MgmtHLSwitches = &arr
+			}
+			*hwinv.MgmtHLSwitches = append(*hwinv.MgmtHLSwitches, hwloc)
+		case base.CDUMgmtSwitch:
+			if hwinv.CDUMgmtSwitches == nil {
+				arr := make([]*HWInvByLoc, 0, 1)
+				hwinv.CDUMgmtSwitches = &arr
+			}
+			*hwinv.CDUMgmtSwitches = append(*hwinv.CDUMgmtSwitches, hwloc)
 		case base.Node:
 			if hwinv.Nodes == nil {
 				arr := make([]*HWInvByLoc, 0, 1)
@@ -682,6 +697,46 @@ func NewHWInvByLocs(hwlocs []HWInvByLoc) ([]*HWInvByLoc, error) {
 				errlog.Printf("FRUID Error: %s\n", err.Error())
 				errlog.Printf("Using untrackable FRUID: %s\n", hwloc.PopulatedFRU.FRUID)
 			}
+		case base.MgmtHLSwitch:
+			if hwloc.HMSMgmtHLSwitchLocationInfo == nil {
+				return hls, ErrHWInvMissingLoc
+			}
+			if hwloc.PopulatedFRU.HMSMgmtHLSwitchFRUInfo == nil {
+				return hls, ErrHWInvMissingFRUInfo
+			}
+			hwloc.HWInventoryByLocationType = HWInvByLocMgmtHLSwitch
+			hwloc.PopulatedFRU.HWInventoryByFRUType = HWInvByFRUMgmtHLSwitch
+			c := new(rf.EpChassis)
+			c.Type = hwloc.Type
+			c.ID = hwloc.ID
+			c.ChassisRF.Manufacturer = hwloc.PopulatedFRU.HMSMgmtHLSwitchFRUInfo.Manufacturer
+			c.ChassisRF.PartNumber = hwloc.PopulatedFRU.HMSMgmtHLSwitchFRUInfo.PartNumber
+			c.ChassisRF.SerialNumber = hwloc.PopulatedFRU.HMSMgmtHLSwitchFRUInfo.SerialNumber
+			hwloc.PopulatedFRU.FRUID, err = rf.GetChassisFRUID(c)
+			if err != nil {
+				errlog.Printf("FRUID Error: %s\n", err.Error())
+				errlog.Printf("Using untrackable FRUID: %s\n", hwloc.PopulatedFRU.FRUID)
+			}
+		case base.CDUMgmtSwitch:
+			if hwloc.HMSCDUMgmtSwitchLocationInfo == nil {
+				return hls, ErrHWInvMissingLoc
+			}
+			if hwloc.PopulatedFRU.HMSCDUMgmtSwitchFRUInfo == nil {
+				return hls, ErrHWInvMissingFRUInfo
+			}
+			hwloc.HWInventoryByLocationType = HWInvByLocCDUMgmtSwitch
+			hwloc.PopulatedFRU.HWInventoryByFRUType = HWInvByFRUCDUMgmtSwitch
+			c := new(rf.EpChassis)
+			c.Type = hwloc.Type
+			c.ID = hwloc.ID
+			c.ChassisRF.Manufacturer = hwloc.PopulatedFRU.HMSCDUMgmtSwitchFRUInfo.Manufacturer
+			c.ChassisRF.PartNumber = hwloc.PopulatedFRU.HMSCDUMgmtSwitchFRUInfo.PartNumber
+			c.ChassisRF.SerialNumber = hwloc.PopulatedFRU.HMSCDUMgmtSwitchFRUInfo.SerialNumber
+			hwloc.PopulatedFRU.FRUID, err = rf.GetChassisFRUID(c)
+			if err != nil {
+				errlog.Printf("FRUID Error: %s\n", err.Error())
+				errlog.Printf("Using untrackable FRUID: %s\n", hwloc.PopulatedFRU.FRUID)
+			}
 		case base.Node:
 			if hwloc.HMSNodeLocationInfo == nil {
 				return hls, ErrHWInvMissingLoc
@@ -984,6 +1039,8 @@ type HWInvByLoc struct {
 	HMSNodeEnclosureLocationInfo *rf.ChassisLocationInfoRF   `json:"NodeEnclosureLocationInfo,omitempty"`
 	HMSHSNBoardLocationInfo      *rf.ChassisLocationInfoRF   `json:"HSNBoardLocationInfo,omitempty"`
 	HMSMgmtSwitchLocationInfo    *rf.ChassisLocationInfoRF   `json:"MgmtSwitchLocationInfo,omitempty"`
+	HMSMgmtHLSwitchLocationInfo  *rf.ChassisLocationInfoRF   `json:"MgmtHLSwitchLocationInfo,omitempty"`
+	HMSCDUMgmtSwitchLocationInfo *rf.ChassisLocationInfoRF   `json:"CDUMgmtSwitchLocationInfo,omitempty"`
 	HMSNodeLocationInfo          *rf.SystemLocationInfoRF    `json:"NodeLocationInfo,omitempty"`
 	HMSProcessorLocationInfo     *rf.ProcessorLocationInfoRF `json:"ProcessorLocationInfo,omitempty"`
 	HMSNodeAccelLocationInfo     *rf.ProcessorLocationInfoRF `json:"NodeAccelLocationInfo,omitempty"`
@@ -1017,6 +1074,8 @@ const (
 	HWInvByLocNodeEnclosure            string = "HWInvByLocNodeEnclosure"
 	HWInvByLocHSNBoard                 string = "HWInvByLocHSNBoard"
 	HWInvByLocMgmtSwitch               string = "HWInvByLocMgmtSwitch"
+	HWInvByLocMgmtHLSwitch             string = "HWInvByLocMgmtHLSwitch"
+	HWInvByLocCDUMgmtSwitch            string = "HWInvByLocCDUMgmtSwitch"
 	HWInvByLocNode                     string = "HWInvByLocNode"
 	HWInvByLocProcessor                string = "HWInvByLocProcessor"
 	HWInvByLocNodeAccel                string = "HWInvByLocNodeAccel"
@@ -1079,6 +1138,10 @@ func (hw *HWInvByLoc) DecodeLocationInfo(locInfoJSON []byte) error {
 	case base.HSNBoard:
 		fallthrough
 	case base.MgmtSwitch:
+		fallthrough
+	case base.MgmtHLSwitch:
+		fallthrough
+	case base.CDUMgmtSwitch:
 		rfChassisLocationInfo = new(rf.ChassisLocationInfoRF)
 		err = json.Unmarshal(locInfoJSON, rfChassisLocationInfo)
 		if err == nil {
@@ -1105,6 +1168,12 @@ func (hw *HWInvByLoc) DecodeLocationInfo(locInfoJSON []byte) error {
 			case base.MgmtSwitch:
 				hw.HMSMgmtSwitchLocationInfo = rfChassisLocationInfo
 				hw.HWInventoryByLocationType = HWInvByLocMgmtSwitch
+			case base.MgmtHLSwitch:
+				hw.HMSMgmtHLSwitchLocationInfo = rfChassisLocationInfo
+				hw.HWInventoryByLocationType = HWInvByLocMgmtHLSwitch
+			case base.CDUMgmtSwitch:
+				hw.HMSCDUMgmtSwitchLocationInfo = rfChassisLocationInfo
+				hw.HWInventoryByLocationType = HWInvByLocCDUMgmtSwitch
 			}
 		}
 	// HWInv based on Redfish "System" Type.
@@ -1246,6 +1315,10 @@ func (hw *HWInvByLoc) EncodeLocationInfo() ([]byte, error) {
 		locInfoJSON, err = json.Marshal(hw.HMSHSNBoardLocationInfo)
 	case base.MgmtSwitch:
 		locInfoJSON, err = json.Marshal(hw.HMSMgmtSwitchLocationInfo)
+	case base.MgmtHLSwitch:
+		locInfoJSON, err = json.Marshal(hw.HMSMgmtHLSwitchLocationInfo)
+	case base.CDUMgmtSwitch:
+		locInfoJSON, err = json.Marshal(hw.HMSCDUMgmtSwitchLocationInfo)
 	// HWInv based on Redfish "System" Type.
 	case base.Node:
 		locInfoJSON, err = json.Marshal(hw.HMSNodeLocationInfo)
@@ -1320,6 +1393,8 @@ type HWInvByFRU struct {
 	HMSNodeEnclosureFRUInfo *rf.ChassisFRUInfoRF   `json:"NodeEnclosureFRUInfo,omitempty"`
 	HMSHSNBoardFRUInfo      *rf.ChassisFRUInfoRF   `json:"HSNBoardFRUInfo,omitempty"`
 	HMSMgmtSwitchFRUInfo    *rf.ChassisFRUInfoRF   `json:"MgmtSwitchFRUInfo,omitempty"`
+	HMSMgmtHLSwitchFRUInfo  *rf.ChassisFRUInfoRF   `json:"MgmtHLSwitchFRUInfo,omitempty"`
+	HMSCDUMgmtSwitchFRUInfo *rf.ChassisFRUInfoRF   `json:"CDUMgmtSwitchFRUInfo,omitempty"`
 	HMSNodeFRUInfo          *rf.SystemFRUInfoRF    `json:"NodeFRUInfo,omitempty"`
 	HMSProcessorFRUInfo     *rf.ProcessorFRUInfoRF `json:"ProcessorFRUInfo,omitempty"`
 	HMSNodeAccelFRUInfo     *rf.ProcessorFRUInfoRF `json:"NodeAccelFRUInfo,omitempty"`
@@ -1349,6 +1424,8 @@ const (
 	HWInvByFRUNodeEnclosure            string = "HWInvByFRUNodeEnclosure"
 	HWInvByFRUHSNBoard                 string = "HWInvByFRUHSNBoard"
 	HWInvByFRUMgmtSwitch               string = "HWInvByFRUMgmtSwitch"
+	HWInvByFRUMgmtHLSwitch             string = "HWInvByFRUMgmtHLSwitch"
+	HWInvByFRUCDUMgmtSwitch            string = "HWInvByFRUCDUMgmtSwitch"
 	HWInvByFRUNode                     string = "HWInvByFRUNode"
 	HWInvByFRUProcessor                string = "HWInvByFRUProcessor"
 	HWInvByFRUNodeAccel                string = "HWInvByFRUNodeAccel"
@@ -1411,6 +1488,10 @@ func (hf *HWInvByFRU) DecodeFRUInfo(fruInfoJSON []byte) error {
 	case base.HSNBoard:
 		fallthrough
 	case base.MgmtSwitch:
+		fallthrough
+	case base.MgmtHLSwitch:
+		fallthrough
+	case base.CDUMgmtSwitch:
 		rfChassisFRUInfo = new(rf.ChassisFRUInfoRF)
 		err = json.Unmarshal(fruInfoJSON, rfChassisFRUInfo)
 		if err == nil {
@@ -1437,6 +1518,12 @@ func (hf *HWInvByFRU) DecodeFRUInfo(fruInfoJSON []byte) error {
 			case base.MgmtSwitch:
 				hf.HMSMgmtSwitchFRUInfo = rfChassisFRUInfo
 				hf.HWInventoryByFRUType = HWInvByFRUMgmtSwitch
+			case base.MgmtHLSwitch:
+				hf.HMSMgmtHLSwitchFRUInfo = rfChassisFRUInfo
+				hf.HWInventoryByFRUType = HWInvByFRUMgmtHLSwitch
+			case base.CDUMgmtSwitch:
+				hf.HMSCDUMgmtSwitchFRUInfo = rfChassisFRUInfo
+				hf.HWInventoryByFRUType = HWInvByFRUCDUMgmtSwitch
 			}
 		}
 	// HWInv based on Redfish "System" Type.
@@ -1583,6 +1670,10 @@ func (hf *HWInvByFRU) EncodeFRUInfo() ([]byte, error) {
 		fruInfoJSON, err = json.Marshal(hf.HMSHSNBoardFRUInfo)
 	case base.MgmtSwitch:
 		fruInfoJSON, err = json.Marshal(hf.HMSMgmtSwitchFRUInfo)
+	case base.MgmtHLSwitch:
+		fruInfoJSON, err = json.Marshal(hf.HMSMgmtHLSwitchFRUInfo)
+	case base.CDUMgmtSwitch:
+		fruInfoJSON, err = json.Marshal(hf.HMSCDUMgmtSwitchFRUInfo)
 	// HWInv based on Redfish "System" Type.
 	case base.Node:
 		fruInfoJSON, err = json.Marshal(hf.HMSNodeFRUInfo)

@@ -948,6 +948,12 @@ func (s *SmD) DiscoverHWInvByLocChassis(chEP *rf.EpChassis) (*sm.HWInvByLoc, err
 	case base.MgmtSwitch:
 		hwloc.HMSMgmtSwitchLocationInfo = &chEP.ChassisRF.ChassisLocationInfoRF
 		hwloc.HWInventoryByLocationType = sm.HWInvByLocMgmtSwitch
+	case base.MgmtHLSwitch:
+		hwloc.HMSMgmtHLSwitchLocationInfo = &chEP.ChassisRF.ChassisLocationInfoRF
+		hwloc.HWInventoryByLocationType = sm.HWInvByLocMgmtHLSwitch
+	case base.CDUMgmtSwitch:
+		hwloc.HMSCDUMgmtSwitchLocationInfo = &chEP.ChassisRF.ChassisLocationInfoRF
+		hwloc.HWInventoryByLocationType = sm.HWInvByLocCDUMgmtSwitch
 	case base.HMSTypeInvalid:
 		err := base.ErrHMSTypeInvalid
 		return nil, err
@@ -1396,6 +1402,12 @@ func (s *SmD) DiscoverHWInvByFRUChassis(chEP *rf.EpChassis) (*sm.HWInvByFRU, err
 	case base.MgmtSwitch:
 		hwfru.HMSMgmtSwitchFRUInfo = rfChassisFRUInfo
 		hwfru.HWInventoryByFRUType = sm.HWInvByFRUMgmtSwitch
+	case base.MgmtHLSwitch:
+		hwfru.HMSMgmtHLSwitchFRUInfo = rfChassisFRUInfo
+		hwfru.HWInventoryByFRUType = sm.HWInvByFRUMgmtHLSwitch
+	case base.CDUMgmtSwitch:
+		hwfru.HMSCDUMgmtSwitchFRUInfo = rfChassisFRUInfo
+		hwfru.HWInventoryByFRUType = sm.HWInvByFRUCDUMgmtSwitch
 	case base.HMSTypeInvalid:
 		err := base.ErrHMSTypeInvalid
 		return nil, err

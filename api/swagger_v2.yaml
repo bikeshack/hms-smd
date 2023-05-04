@@ -1420,6 +1420,8 @@ paths:
             - NodeEnclosurePowerSupply
             - HSNBoard
             - MgmtSwitch
+            - MgmtHLSwitch
+            - CDUMgmtSwitch
             - Node
             - Processor
             - Drive
@@ -7024,6 +7026,22 @@ definitions:
           $ref: '#/definitions/HWInvByLocMgmtSwitch'
         readOnly: true
         type: array
+      MgmtHLSwitches:
+        description: >-
+          All appropriate components with HMS type 'MgmtHLSwitch' given
+          Target component/partition and query type.
+        items:
+          $ref: '#/definitions/HWInvByLocMgmtHLSwitch'
+        readOnly: true
+        type: array
+      CDUMgmtSwitches:
+        description: >-
+          All appropriate components with HMS type 'CDUMgmtSwitch' given
+          Target component/partition and query type.
+        items:
+          $ref: '#/definitions/HWInvByLocCDUMgmtSwitch'
+        readOnly: true
+        type: array
       Nodes:
         description: >-
           All appropriate components with HMS type 'Node' given Target
@@ -7178,6 +7196,8 @@ definitions:
           - HWInvByLocNodeEnclosure
           - HWInvByLocHSNBoard
           - HWInvByLocMgmtSwitch
+          - HWInvByLocMgmtHLSwitch
+          - HWInvByLocCDUMgmtSwitch
           - HWInvByLocNode
           - HWInvByLocProcessor
           - HWInvByLocNodeAccel
@@ -7384,6 +7404,32 @@ definitions:
       - type: object
         properties:
           MgmtSwitchLocationInfo:
+            $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisLocationInfo'
+    type: object
+  HWInvByLocMgmtHLSwitch:
+    description: >-
+      This is a subtype of HWInventoryByLocation for HMSType MgmtHLSwitch.
+      It represents a high level management switch.  It is selected via the
+      'discriminator: HWInventoryByLocationType' of HWInventoryByLocation
+      when HWInventoryByLocationType is 'HWInvByLocMgmtHLSwitch'.
+    allOf:
+      - $ref: '#/definitions/HWInventory.1.0.0_HWInventoryByLocation'
+      - type: object
+        properties:
+          MgmtHLSwitchLocationInfo:
+            $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisLocationInfo'
+    type: object
+  HWInvByLocCDUMgmtSwitch:
+    description: >-
+      This is a subtype of HWInventoryByLocation for HMSType CDUMgmtSwitch.
+      It represents a CDU management switch.  It is selected via the
+      'discriminator: HWInventoryByLocationType' of HWInventoryByLocation
+      when HWInventoryByLocationType is 'HWInvByLocCDUMgmtSwitch'.
+    allOf:
+      - $ref: '#/definitions/HWInventory.1.0.0_HWInventoryByLocation'
+      - type: object
+        properties:
+          CDUMgmtSwitchLocationInfo:
             $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisLocationInfo'
     type: object
   HWInvByLocNode:
@@ -8427,6 +8473,8 @@ definitions:
           - HWInvByFRUNodeEnclosure
           - HWInvByFRUHSNBoard
           - HWInvByFRUMgmtSwitch
+          - HWInvByFRUMgmtHLSwitch
+          - HWInvByFRUCDUMgmtSwitch
           - HWInvByFRUNode
           - HWInvByFRUProcessor
           - HWInvByFRUNodeAccel
@@ -8553,6 +8601,32 @@ definitions:
       - type: object
         properties:
           MgmtSwitchFRUInfo:
+            $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisFRUInfo'
+    type: object
+  HWInvByFRUMgmtHLSwitch:
+    description: >-
+      This is a subtype of HWInventoryByFRU for HMSType MgmtHLSwitch.
+      It represents a high level management switch.  It is selected via the
+      'discriminator: HWInventoryByFRUType' of HWInventoryByFRU when
+      HWInventoryByFRUType is 'HWInvByFRUMgmtHLSwitch'.
+    allOf:
+      - $ref: '#/definitions/HWInventory.1.0.0_HWInventoryByFRU'
+      - type: object
+        properties:
+          MgmtHLSwitchFRUInfo:
+            $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisFRUInfo'
+    type: object
+  HWInvByFRUCDUMgmtSwitch:
+    description: >-
+      This is a subtype of HWInventoryByFRU for HMSType CDUMgmtSwitch.
+      It represents a CDU management switch.  It is selected via the
+      'discriminator: HWInventoryByFRUType' of HWInventoryByFRU when
+      HWInventoryByFRUType is 'HWInvByFRUCDUMgmtSwitch'.
+    allOf:
+      - $ref: '#/definitions/HWInventory.1.0.0_HWInventoryByFRU'
+      - type: object
+        properties:
+          CDUMgmtSwitchFRUInfo:
             $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisFRUInfo'
     type: object
   HWInvByFRUNode:
@@ -11717,6 +11791,8 @@ definitions:
       - NodeEnclosurePowerSupply
       - HSNBoard
       - MgmtSwitch
+      - MgmtHLSwitch
+      - CDUMgmtSwitch
       - Node
       - Processor
       - Drive
@@ -12003,6 +12079,8 @@ parameters:
       - NodeEnclosurePowerSupply
       - HSNBoard
       - MgmtSwitch
+      - MgmtHLSwitch
+      - CDUMgmtSwitch
       - Node
       - Processor
       - Drive
