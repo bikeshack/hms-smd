@@ -115,7 +115,9 @@ stages:
                         required: True
                         enum:
                           - "CabinetPDUController"
+                          - "CDUMgmtSwitch"
                           - "ChassisBMC"
+                          - "MgmtHLSwitch"
                           - "MgmtSwitch"
                           - "NodeBMC"
                           - "RouterBMC"

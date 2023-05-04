@@ -81,10 +81,12 @@ stages:
                           - "CabinetPDUController"
                           - "CabinetPDUPowerConnector"
                           - "CabinetPDU"
+                          - "CDUMgmtSwitch"
                           - "ChassisBMC"
                           - "Chassis"
                           - "ComputeModule"
                           - "HSNBoard"
+                          - "MgmtHLSwitch"
                           - "MgmtSwitch"
                           - "NodeBMC" # has ManagementEthernet MACAddress
                           - "NodeEnclosure"
