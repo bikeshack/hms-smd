@@ -44,7 +44,8 @@ func (s *SmD) NewRouter(routes []Route) *mux.Router {
 		var handler http.Handler
 		handler = route.HandlerFunc
 		if s.lgLvl >= LOG_DEBUG ||
-			(route.Name != "doReadyGet" && route.Name != "doLivenessGet") {
+			(!strings.Contains(route.Name, "doReadyGet") &&
+			!strings.Contains(route.Name, "doLivenessGet")) {
 			handler = s.Logger(handler, route.Name)
 		}
 

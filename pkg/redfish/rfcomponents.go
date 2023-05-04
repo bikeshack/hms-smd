@@ -415,7 +415,9 @@ func (c *EpChassis) discoverLocalPhase2() {
 
 	// Check if we have something valid to insert into the data store
 	hmsType := base.GetHMSType(c.ID)
-	if !base.IsHMSTypeContainer(hmsType) || c.Type != hmsType.String() {
+	if (!base.IsHMSTypeContainer(hmsType) &&
+	    hmsType != base.MgmtSwitch) ||
+	    c.Type != hmsType.String() {
 		errlog.Printf("Error: Bad xname ID ('%s') or Type ('%s' != %s) for %s\n",
 			c.ID, c.Type, hmsType.String(), c.ChassisURL)
 		c.LastStatus = VerificationFailed

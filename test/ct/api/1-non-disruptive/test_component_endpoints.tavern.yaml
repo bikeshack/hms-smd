@@ -1,6 +1,6 @@
 # MIT License
 #
-# (C) Copyright [2019-2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright [2019-2023] Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -85,6 +85,7 @@ stages:
                           - "Chassis"
                           - "ComputeModule"
                           - "HSNBoard"
+                          - "MgmtSwitch"
                           - "NodeBMC" # has ManagementEthernet MACAddress
                           - "NodeEnclosure"
                           - "Node" # has ManagementEthernet MACAddress
@@ -111,6 +112,7 @@ stages:
                           - "BMC"
                           - "C13"
                           - "Cx"
+                          - "Drawer"
                           - "Enclosure"
                           - "EnclosureManager"
                           - "IEC_60320_C13"
@@ -139,10 +141,6 @@ stages:
                       Enabled:
                         type: bool
                         required: True
-                      RedfishEndpointID:
-                        type: str
-                        required: True
-                        pattern: "x[0-9]+[cm][0-9]+.*"
                       RedfishURL:
                         type: str
                         required: True
@@ -631,7 +629,7 @@ stages:
   # GET /ComponentEndpoints/{nodeBMC} valid nonexistent API response code
   - name: Verify failure when providing a valid but nonexistent BMC xname in the ComponentEndpoints collection
     request:
-      url: "{hsm_base_url}/hsm/v2/Inventory/ComponentEndpoints/x1025c7s4b4"
+      url: "{hsm_base_url}/hsm/v2/Inventory/ComponentEndpoints/x9999c7s9b9"
       method: GET
       verify: !bool "{verify}"
     response:
@@ -644,7 +642,7 @@ stages:
   # GET /ComponentEndpoints/{nodeBMC} invalid API response code
   - name: Verify failure when providing an invalid BMC xname in the ComponentEndpoints collection
     request:
-      url: "{hsm_base_url}/hsm/v2/Inventory/ComponentEndpoints/x1025000c7s4b4"
+      url: "{hsm_base_url}/hsm/v2/Inventory/ComponentEndpoints/x9999999c7s9b9"
       method: GET
       verify: !bool "{verify}"
     response:

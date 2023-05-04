@@ -1419,6 +1419,7 @@ paths:
             - NodeEnclosure
             - NodeEnclosurePowerSupply
             - HSNBoard
+            - MgmtSwitch
             - Node
             - Processor
             - Drive
@@ -7015,6 +7016,14 @@ definitions:
           $ref: '#/definitions/HWInvByLocHSNBoard'
         readOnly: true
         type: array
+      MgmtSwitches:
+        description: >-
+          All appropriate components with HMS type 'MgmtSwitch' given
+          Target component/partition and query type.
+        items:
+          $ref: '#/definitions/HWInvByLocMgmtSwitch'
+        readOnly: true
+        type: array
       Nodes:
         description: >-
           All appropriate components with HMS type 'Node' given Target
@@ -7168,6 +7177,7 @@ definitions:
           - HWInvByLocRouterModule
           - HWInvByLocNodeEnclosure
           - HWInvByLocHSNBoard
+          - HWInvByLocMgmtSwitch
           - HWInvByLocNode
           - HWInvByLocProcessor
           - HWInvByLocNodeAccel
@@ -7361,6 +7371,19 @@ definitions:
       - type: object
         properties:
           HSNBoardLocationInfo:
+            $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisLocationInfo'
+    type: object
+  HWInvByLocMgmtSwitch:
+    description: >-
+      This is a subtype of HWInventoryByLocation for HMSType MgmtSwitch.
+      It represents a management switch.  It is selected via the
+      'discriminator: HWInventoryByLocationType' of HWInventoryByLocation
+      when HWInventoryByLocationType is 'HWInvByLocMgmtSwitch'.
+    allOf:
+      - $ref: '#/definitions/HWInventory.1.0.0_HWInventoryByLocation'
+      - type: object
+        properties:
+          MgmtSwitchLocationInfo:
             $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisLocationInfo'
     type: object
   HWInvByLocNode:
@@ -8403,6 +8426,7 @@ definitions:
           - HWInvByFRURouterModule
           - HWInvByFRUNodeEnclosure
           - HWInvByFRUHSNBoard
+          - HWInvByFRUMgmtSwitch
           - HWInvByFRUNode
           - HWInvByFRUProcessor
           - HWInvByFRUNodeAccel
@@ -8516,6 +8540,19 @@ definitions:
       - type: object
         properties:
           HSNBoardFRUInfo:
+            $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisFRUInfo'
+    type: object
+  HWInvByFRUMgmtSwitch:
+    description: >-
+      This is a subtype of HWInventoryByFRU for HMSType MgmtSwitch.
+      It represents a management switch.  It is selected via the
+      'discriminator: HWInventoryByFRUType' of HWInventoryByFRU when
+      HWInventoryByFRUType is 'HWInvByFRUMgmtSwitch'.
+    allOf:
+      - $ref: '#/definitions/HWInventory.1.0.0_HWInventoryByFRU'
+      - type: object
+        properties:
+          MgmtSwitchFRUInfo:
             $ref: '#/definitions/HWInventory.1.0.0_RedfishChassisFRUInfo'
     type: object
   HWInvByFRUNode:
@@ -11679,6 +11716,7 @@ definitions:
       - NodeEnclosure
       - NodeEnclosurePowerSupply
       - HSNBoard
+      - MgmtSwitch
       - Node
       - Processor
       - Drive
@@ -11964,6 +12002,7 @@ parameters:
       - NodeEnclosure
       - NodeEnclosurePowerSupply
       - HSNBoard
+      - MgmtSwitch
       - Node
       - Processor
       - Drive

@@ -945,6 +945,9 @@ func (s *SmD) DiscoverHWInvByLocChassis(chEP *rf.EpChassis) (*sm.HWInvByLoc, err
 	case base.HSNBoard:
 		hwloc.HMSHSNBoardLocationInfo = &chEP.ChassisRF.ChassisLocationInfoRF
 		hwloc.HWInventoryByLocationType = sm.HWInvByLocHSNBoard
+	case base.MgmtSwitch:
+		hwloc.HMSMgmtSwitchLocationInfo = &chEP.ChassisRF.ChassisLocationInfoRF
+		hwloc.HWInventoryByLocationType = sm.HWInvByLocMgmtSwitch
 	case base.HMSTypeInvalid:
 		err := base.ErrHMSTypeInvalid
 		return nil, err
@@ -1390,6 +1393,9 @@ func (s *SmD) DiscoverHWInvByFRUChassis(chEP *rf.EpChassis) (*sm.HWInvByFRU, err
 	case base.HSNBoard:
 		hwfru.HMSHSNBoardFRUInfo = rfChassisFRUInfo
 		hwfru.HWInventoryByFRUType = sm.HWInvByFRUHSNBoard
+	case base.MgmtSwitch:
+		hwfru.HMSMgmtSwitchFRUInfo = rfChassisFRUInfo
+		hwfru.HWInventoryByFRUType = sm.HWInvByFRUMgmtSwitch
 	case base.HMSTypeInvalid:
 		err := base.ErrHMSTypeInvalid
 		return nil, err
