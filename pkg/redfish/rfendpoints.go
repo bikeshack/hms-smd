@@ -1,6 +1,6 @@
 // MIT License
 //
-// (C) Copyright [2019-2021] Hewlett Packard Enterprise Development LP
+// (C) Copyright [2019-2023] Hewlett Packard Enterprise Development LP
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
 // copy of this software and associated documentation files (the "Software"),
@@ -339,7 +339,10 @@ func NewRedfishEPDescription(rep *RawRedfishEP) (*RedfishEPDescription, error) {
 	// Get type from ID (or hostname if ID not given).  It should be a
 	// valid controller type.
 	hmsType := base.GetHMSType(ep.ID)
-	if base.IsHMSTypeController(hmsType) {
+	if base.IsHMSTypeController(hmsType) ||
+	   hmsType == base.MgmtSwitch ||
+	   hmsType == base.MgmtHLSwitch ||
+	   hmsType == base.CDUMgmtSwitch {
 		ep.Type = hmsType.String()
 	} else if hmsType == base.HMSTypeInvalid {
 		// No type found.  Not a valid xname
@@ -1140,7 +1143,11 @@ func (ep *RedfishEP) CheckPrePhase1() error {
 		return err
 	}
 	hmsType := base.GetHMSType(ep.ID)
-	if !base.IsHMSTypeController(hmsType) || ep.Type != hmsType.String() {
+	if (!base.IsHMSTypeController(hmsType) &&
+	    hmsType != base.MgmtSwitch &&
+		hmsType != base.MgmtHLSwitch &&
+		hmsType != base.CDUMgmtSwitch) ||
+	    ep.Type != hmsType.String() {
 		err := fmt.Errorf("bad xname ID ('%s') or Type ('%s') for %s\n",
 			ep.ID, ep.Type, ep.FQDN)
 		return err
@@ -1193,6 +1200,11 @@ func (ep *RedfishEP) getChassisHMSID(c *EpChassis, hmsType string, ordinal int) 
 	if ordinal < 0 || ordinal >= len(ep.Chassis.OIDs) {
 		// Invalid ordinal or initial -1 value.
 		return ""
+	}
+	if hmsTypeStr == base.MgmtSwitch.String() ||
+	   hmsTypeStr == base.MgmtHLSwitch.String() ||
+	   hmsTypeStr == base.CDUMgmtSwitch.String() {
+		return ep.ID
 	}
 	// If the RedfishEndpoint ID is valid, there will be a b in the xname.
 	epIDSplit := strings.SplitN(ep.ID, "b", 2)
@@ -1287,6 +1299,13 @@ func (ep *RedfishEP) getChassisHMSType(c *EpChassis) string {
 					return base.RouterModule.String()
 				}
 			}
+		}
+		return base.HMSTypeInvalid.String()
+	case RFSubtypeDrawer:
+		if ep.Type == base.MgmtSwitch.String() ||
+		   ep.Type == base.MgmtHLSwitch.String() ||
+		   ep.Type == base.CDUMgmtSwitch.String() {
+			return ep.Type
 		}
 		return base.HMSTypeInvalid.String()
 	default:
@@ -1772,6 +1791,12 @@ func (ep *RedfishEP) getManagerHMSID(m *EpManager, hmsType string, ordinal int) 
 // xname (once/if the ordinal is added) per retur	"unicode"ned type, given a
 // particular Redfish endpoint xname and type.
 func (ep *RedfishEP) getManagerHMSType(m *EpManager) string {
+	// Don't discover Management switch BMCs.
+	if ep.Type == base.MgmtSwitch.String() ||
+	   ep.Type == base.MgmtHLSwitch.String() ||
+	   ep.Type == base.CDUMgmtSwitch.String() {
+		return base.HMSTypeInvalid.String()
+	}
 	// Just one?  That's this endpoint's type.
 	// example: RouterBMC
 	if ep.Managers.Num == 1 {
