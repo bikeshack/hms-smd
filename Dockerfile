@@ -25,7 +25,7 @@
 
 ### Build Base Stage ###
 # Build base just has the packages installed we need.
-FROM artifactory.algol60.net/docker.io/library/golang:1.16-alpine AS build-base
+FROM golang:1.16-alpine AS build-base
 
 RUN set -ex \
     && apk -U upgrade \
@@ -39,10 +39,14 @@ FROM build-base AS base
 RUN go env -w GO111MODULE=auto
 
 # Copy all the necessary files to the image.
-COPY cmd $GOPATH/src/github.com/Cray-HPE/hms-smd/v2/cmd
-COPY internal $GOPATH/src/github.com/Cray-HPE/hms-smd/v2/internal
-COPY pkg $GOPATH/src/github.com/Cray-HPE/hms-smd/v2/pkg
-COPY vendor $GOPATH/src/github.com/Cray-HPE/hms-smd/v2/vendor
+RUN mkdir /build/
+COPY cmd /build/cmd
+COPY internal /build/internal
+COPY pkg /build/pkg
+COPY go.mod go.sum /build/
+
+WORKDIR /build
+
 
 
 ### Build Stage ###
@@ -50,20 +54,17 @@ FROM base AS builder
 
 # Base image contains everything needed for Go building, just build.
 RUN set -ex \
-    && go build -v -tags musl -i github.com/Cray-HPE/hms-smd/v2/cmd/smd \
-    && go build -v -tags musl -i github.com/Cray-HPE/hms-smd/v2/cmd/smd-loader \
-    && go build -v -tags musl -i github.com/Cray-HPE/hms-smd/v2/cmd/smd-init
+    && go mod tidy \
+    && go build -o smd -v -tags musl ./cmd/smd \
+    && go build -o smd-loader -v -tags musl ./cmd/smd-loader \
+    && go build -o smd-init -v -tags musl ./cmd/smd-init
 
 
 ### Final Stage ###
-FROM artifactory.algol60.net/docker.io/alpine:3.15
+FROM alpine:3.15
 LABEL maintainer="Hewlett Packard Enterprise" 
 EXPOSE 27779
 STOPSIGNAL SIGTERM
-
-# Copy the entrypoint and schema files.
-COPY migrations/postgres /migrations
-COPY entrypoint.sh /
 
 ENV SMD_DBNAME="hmsds"
 ENV SMD_DBUSER="hmsdsuser"
@@ -78,31 +79,20 @@ ENV SMD_DBPASS="hmsdsuser"
 ENV TLSCERT=""
 ENV TLSKEY=""
 
-ENV VAULT_ADDR="http://cray-vault.vault:8200"
-ENV VAULT_SKIP_VERIFY="true"
-
-ENV SMD_RVAULT="true"
-ENV SMD_WVAULT="true"
-
-ENV RF_MSG_HOST "cray-shared-kafka-kafka-bootstrap.services.svc.cluster.local:9092:cray-dmtf-resource-event"
 ENV LOGLEVEL 2
 
-ENV SMD_SLS_HOST "http://cray-sls/v1"
-
-ENV SMD_HBTD_HOST "http://cray-hbtd/hmi/v1"
-
 ENV SMD_HWINVHIST_AGE_MAX_DAYS=365
-
-ENV HMS_CONFIG_PATH="/hms_config/hms_config.json"
 
 ENV SMD_CA_URI=""
 
 # Copy the final binary
-COPY --from=builder /go/smd /usr/local/bin
-COPY --from=builder /go/smd-loader /usr/local/bin
-COPY --from=builder /go/smd-init /usr/local/bin
+COPY --from=builder /build/smd /usr/local/bin
+COPY --from=builder /build/smd-loader /usr/local/bin
+COPY --from=builder /build/smd-init /usr/local/bin
 
 COPY configs /configs
+
+WORKDIR /
 
 # Cannot live without these packages installed.
 RUN set -ex \
@@ -112,7 +102,9 @@ RUN set -ex \
     && mkdir -p /persistent_migrations \
     && chmod 777 /persistent_migrations
 
+COPY migrations/postgres /persistent_migrations
+
 # nobody 65534:65534
 USER 65534:65534
 
-CMD ["sh", "-c", "smd -db-dsn=$DBDSN -tls-cert=$TLSCERT -tls-key=$TLSKEY -log=$LOGLEVEL -dbhost=$POSTGRES_HOST -dbport=$POSTGRES_PORT -sls-url=$SMD_SLS_HOST"]
+CMD ["sh", "-c", "smd -db-dsn=$DBDSN -tls-cert=$TLSCERT -tls-key=$TLSKEY -log=$LOGLEVEL -dbhost=$POSTGRES_HOST -dbport=$POSTGRES_PORT"]
