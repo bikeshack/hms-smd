@@ -1,6 +1,6 @@
 module github.com/bikeshack/hms-smd/v2
 
-go 1.20
+go 1.19
 
 require (
 	github.com/Cray-HPE/hms-base v1.15.1
