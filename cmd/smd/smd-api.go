@@ -25,6 +25,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -2439,6 +2440,7 @@ func (s *SmD) doRedfishEndpointsPost(w http.ResponseWriter, r *http.Request) {
 			eps.RedfishEndpoints = append(eps.RedfishEndpoints, ep)
 		}
 	}
+
 	err = s.db.InsertRFEndpoints(eps)
 	if err != nil {
 		s.lg.Printf("failed: %s Err: %s", r.RemoteAddr, err)
@@ -2483,10 +2485,148 @@ func (s *SmD) doRedfishEndpointsPost(w http.ResponseWriter, r *http.Request) {
 		go s.discoverFromEndpoints(eps.RedfishEndpoints, 0, true, false)
 	}
 
+	// parse data and populate component endpoints before inserting into db
+	err = s.parseRedfishPostData(w, eps, body)
+	if err != nil {
+		sendJsonError(w, http.StatusInternalServerError,
+			fmt.Sprintf("could not parse data: %v", err))
+	}
+
 	// Send a URI array of the created resources, along with 201 (created).
 	uris := eps.GetResourceURIArray(s.redfishEPBaseV2)
 	sendJsonNewResourceIDArray(w, s.redfishEPBaseV2, uris)
+	return
+}
 
+// Parse the incoming JSON data, extracts specific keys, and writes the data
+// to the database
+func (s *SmD) parseRedfishPostData(w http.ResponseWriter, eps *sm.RedfishEndpointArray, data []byte) error {
+	s.lg.Printf("parsing request data...")
+	var obj map[string]any
+	err := json.Unmarshal(data, &obj)
+	if err != nil {
+		sendJsonError(w, http.StatusInternalServerError,
+			fmt.Sprintf("failed to unmarshal data: %v", err))
+	}
+
+	// parse json data for chassis ([]interface{})
+	// chassis, foundChassis := obj["Chassis"]
+	// if foundChassis {
+	// 	for _, c := range chassis.([]any) {
+	// 		var rfChassis rf.Chassis
+	// 		ep := &rf.RedfishEP{
+	// 			ServiceRootURL: c["@odata.id"].(string),
+	// 		}
+	// 		rid := rf.ResourceID{Oid: fmt.Sprint(rfChassis.Oid)}
+	// 		epChassis := rf.NewEpChassis(ep, rid, -1)
+	// 		epChassis.InventoryData = rf.InventoryData{
+				
+	// 		}
+	// 		epChassis.ChassisRF = rfChassis
+	// 		epChassis.Power = &rf.EpPower{}
+	// 	}
+	// }
+
+	// systems
+	systems, foundSystems := obj["Systems"]
+	if foundSystems {
+		for _, system := range systems.([]any) {
+			// component
+			data, foundData := system.(map[string]any)["Data"]
+			if foundData {
+				// get system status (specifically if it is enabled?)
+				// status, ok := data.(map[string]any)["Status"].(map[string]any)["State"]
+				// enabled := ok && status == "Enabled"
+				status, ok := data.(map[string]any)["LinkStatus"]
+				enabled := ok && status == "LinkUp"
+				component := base.Component {
+					ID: obj["ID"].(string),
+					// State: "On",
+					Type: "Node",
+					Enabled: &enabled,
+				}
+				_, err := s.db.InsertComponent(&component)
+				if err != nil {
+					sendJsonError(w, http.StatusInternalServerError,
+						fmt.Sprintf("failed to insert component: %v", err))
+					return err
+				}
+			}
+			
+			// component endpoints
+			uuid, ok := data.(map[string]any)["UUID"]
+			if !ok {
+				uuid = ""
+			}
+			cep := sm.ComponentEndpoint{
+				ComponentDescription: rf.ComponentDescription{
+					ID: obj["ID"].(string),
+					Type: "Node",
+					RedfishType: "ComputerSystem",
+					RedfishSubtype: data.(map[string]any)["SystemType"].(string),
+					UUID: uuid.(string),
+					RfEndpointID: obj["ID"].(string),
+				},
+				RfEndpointFQDN: "",
+				URL: data.(map[string]any)["@odata.id"].(string),
+				ComponentEndpointType: "ComponentEndpointComputerSystem",
+				Enabled: 	true,
+				RedfishSystemInfo: nil,
+			}
+
+			// add ethernet interfaces to component endpoint
+			interfaces, foundInterfaces := system.(map[string]any)["EthernetInterfaces"]
+			if foundInterfaces {
+				nicInfo := []*rf.EthernetNICInfo{}
+				for _, i := range interfaces.([]any) {
+					in := i.(map[string]any)
+					nicInfo = append(nicInfo, &rf.EthernetNICInfo{
+						RedfishId: in["Id"].(string),
+						Oid: in["@odata.id"].(string),
+						Description: in["Description"].(string),
+						MACAddress: in["MACAddress"].(string),
+					})
+				}
+				cep.RedfishSystemInfo = &rf.ComponentSystemInfo{
+					Actions: nil,
+					EthNICInfo: nicInfo,
+				}
+			}
+
+			// finally, insert component endpoint into DB
+			err = s.db.UpsertCompEndpoint(&cep)
+			if err != nil {
+				sendJsonError(w, http.StatusInternalServerError,
+					fmt.Sprintf("failed to upsert component endpoint: %v", err))
+				return err
+			}
+		}
+	}
+	
+	
+	// err = json.Unmarshal(data, &cep.ComponentDescription)
+	// err = cep.DecodeComponentInfo(data)
+	// if err != nil {
+	// 	sendJsonError(w, http.StatusInternalServerError,
+	// 		fmt.Sprintf("failed to decode component info: %v", err))
+	// 	return err
+	// }
+	
+
+	// // update found data in database
+	// ep := &sm.RedfishEndpoint{
+	// 	RedfishEPDescription: rf.RedfishEPDescription{
+
+	// 	},
+	// 	ComponentEndpoints: []*sm.ComponentEndpoint{
+
+	// 	},
+	// 	ServiceEndpoints: []*sm.ServiceEndpoint{
+
+	// 	},
+	// }
+	// s.db.UpdateRFEndpoint(ep)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
