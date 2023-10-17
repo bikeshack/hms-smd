@@ -63,7 +63,7 @@ dockers:
       - LICENSE
       - CHANGELOG.md
       - README.md
-      - migrations/*
+      - migrations/
 
 
 
